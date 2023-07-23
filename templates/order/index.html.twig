@@ -4,7 +4,13 @@
 
 {% block body %}
     <h1>order index</h1>
-    <a href="{{ path('order_search') }}">search</a>
+
+    <form class="example-wrapper" role="search" method="POST" action="{{ path('order_search') }}">
+    <div>
+        <input type="text" class="form-control" name="search" value="tttt">
+            <button type="submit" class="btn btn-success" name="sub">search</button>
+    </div>
+    </form>
 
     <table class="table">
         <thead>

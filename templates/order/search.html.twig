@@ -3,39 +3,42 @@
 {% block title %}customer{% endblock %}
 
 {% block body %}
-    <form role="search" method="post" action="{{ path('search') }}">
-    <div>
-        <input type="text" class="form-control" name="search" value="{{ val }}">
-            <button type="submit" class="btn btn-success" name="sub">search</button>
-    </div>
-    </form>
- 
-    <div class="example-wrapper">
-    {% for result in results %}
-    <p style="display:inline-block;width:200px;">{{ result.customer }}</p>
-    <p style="display:inline-block;width:100px;">{{ result.address1 }}</p>
-    <p style="display:inline-block;width:300px;">{{ result.city }}</p>
-    <p style="display:inline-block;width:120px;">{{ result.status }}</p> 
-    {% endfor %}
-    </div>
-    <script>
-     $.ajax({
-        type: "GET",
-        url: "{{ path('search') }}",
-        dataType: "json",
-        data: {search: input},
-        cache: false,
-        success: function (response) {
-               $('.example-wrapper').replaceWith(response);
-               //$('.example-wrapper').load("{{ path('search') }}?search="+ $search.val());
-                console.log(response);
-                 },
-        error: function (response) {
-               console.log(response);
-                   }
-      });
-    </script>
-{% endblock %}
-{% block javascripts %}
-    <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+  <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Customer</th>
+                <th>Address1</th>
+                <th>City</th>
+                <th>Postcode</th>
+                <th>Country</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Deleted</th>
+                <th>Added date</th>
+                <th>Modified date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            <tr>
+                <td>{{ result.id }}</td>
+                <td>{{ result.customer }}</td>
+                <td>{{ result.address1 }}</td>
+                <td>{{ result.city }}</td>
+                <td>{{ result.postcode }}</td>
+                <td>{{ result.country }}</td>
+                <td>{{ result.amount }}</td>
+                <td>{{ result.status }}</td>
+                <td>{{ result.deleted }}</td>
+                <td>{{ result.date |date('d-m-Y') }}</td>
+                <td>{{ result.lastModified |date('d-m-Y H:i') }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no search found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -38,6 +38,27 @@ class OrderController extends AbstractController
         ]);
     }
 
+        /**
+     * * @Route("/search", name="order_search", methods={"POST"})
+     */
+    public function search(Request $request): Response
+    { 
+            $searchTerm=   $request->request->get('search');
+             
+             $em = $this->getDoctrine()->getManager();
+             $results = $em->getRepository(Orders::class)->createQueryBuilder('o')->where('o.status LIKE :search')->orWhere('o.customer LIKE :search')->setParameter('search', $searchTerm)->getQuery()->getResult();
+            
+             return $this->render('order/search.html.twig', [
+                'results' => $results,
+                'val' => $searchTerm
+ 
+    ]);
+ 
+ /*    $response = new JsonResponse();
+    $response->setData(array('list' => $content));
+    return $response; */
+    }
+
     /**
      * @Route("/new", name="order_new", methods={"GET","POST"})
      */
@@ -103,28 +124,5 @@ class OrderController extends AbstractController
         }
 
         return $this->redirectToRoute('order_index');
-    }
-
-    /**
-     * @Route("/search", name="order_search")
-     */
-    public function search(Request $request): Response
-    {
-        $orderSearch = new Orders();
- 
-             $searchTerm = $request->query->get('search');        
-             $em = $this->getDoctrine()->getManager();
-             $results = $em->getRepository(Orders::class)->findOneBy(['status' => $searchTerm]);
-             //$results = $query->getResult();
- 
-             $content = $this->render('order/search.html.twig', [
-                'res' => $results,
-                'val' => $searchTerm
- 
-    ]);
- 
-    $response = new JsonResponse();
-    $response->setData(array('list' => $content));
-    return $response;
     }
 }
